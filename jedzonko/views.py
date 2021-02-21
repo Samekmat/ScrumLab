@@ -10,4 +10,6 @@ class IndexView(View):
         ctx = {"actual_date": datetime.now()}
         # x =5
         return render(request, "test.html", ctx)
+
 # moj pierwszy komentarz
+
