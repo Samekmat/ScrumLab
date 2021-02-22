@@ -12,9 +12,13 @@ class IndexView(View):
         return render(request, "test.html", ctx)
 
 
-# moj pierwszy komentarz
+class MainView(View):
+
+    def get(self, request):
+        return render(request, "index.html")
 
 
 class DashboardView(View):
     def get(self, request):
         return render(request, "dashboard.html")
+
