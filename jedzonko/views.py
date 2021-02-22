@@ -15,10 +15,11 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
-        result1 = Recipe.objects.order_by('?').first()
-        result2 = Recipe.objects.order_by('?').first()
-        result3 = Recipe.objects.order_by('?').first()
-        ctx = {'result1': result1, 'result2': result2, 'result3': result3}
+        results = Recipe.objects.all()
+        results = [x for x in results]
+        random.shuffle(results)
+        results = results[:3]
+        ctx = {'results': results}
         return render(request, 'index.html', ctx)
 
 
