@@ -14,7 +14,11 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
-        return render(request, "index.html")
+        recipe1 = Recipe.objects.get(pk=1)
+        recipe2 = Recipe.objects.get(pk=2)
+        recipe3 = Recipe.objects.get(pk=3)
+        ctx = {'recipe1': recipe1, 'recipe2': recipe2, 'recipe3': recipe3}
+        return render(request, 'index.html', ctx)
 
 
 class DashboardView(View):
@@ -64,4 +68,7 @@ class PlanAddView(View):
 class PlanAddRecipeView(View):
     def get(self, request):
         return render(request, "app-schedules-meal-recipe.html")
+
+
+
 
