@@ -11,5 +11,10 @@ class IndexView(View):
         # x =5
         return render(request, "test.html", ctx)
 
+
 # moj pierwszy komentarz
 
+
+class DashboardView(View):
+    def get(self, request):
+        return render(request, "dashboard.html")
