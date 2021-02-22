@@ -8,7 +8,6 @@ class IndexView(View):
 
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
-        # x =5
         return render(request, "test.html", ctx)
 
 
@@ -22,3 +21,5 @@ class DashboardView(View):
     def get(self, request):
         return render(request, "dashboard.html")
 
+class RecipeListView(View):
+    pass

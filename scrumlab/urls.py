@@ -17,12 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 
-from jedzonko.views import IndexView, DashboardView, MainView
-
+from jedzonko.views import IndexView, DashboardView, MainView, RecipeListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view()),
-    path('', MainView.as_view())
+    path('', MainView.as_view()),
     path('main/', DashboardView.as_view(), name='main'),
+    path('recipe/list/', RecipeListView.as_view(), name='recipes')
 ]
