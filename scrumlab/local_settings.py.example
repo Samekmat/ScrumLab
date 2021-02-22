@@ -4,9 +4,9 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '<tu wprowadź nazwę bazy danych>',
+        'NAME': 'scrumlab',
         'HOST': 'localhost',
-        'PASSWORD': '<tu wpisz hasło bazy danych>',
+        'PASSWORD': 'coderslab',
         'USER': '<tu wprowadź nazwę użytkownika>',
         'PORT': 5432
     }
