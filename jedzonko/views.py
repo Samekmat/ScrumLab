@@ -26,3 +26,42 @@ class DashboardView(View):
             counter += 1
         return render(request, "dashboard.html", {'counter': counter})
 
+
+class RecipeDetailView(View):
+    def get(self, request):
+        return render(request, "app-recipe-details.html")
+
+
+class RecipeListView(View):
+    def get(self, request):
+        return render(request, "app-recipes.html")
+
+
+class RecipeAddView(View):
+    def get(self, request):
+        return render(request, "app-add-recipe.html")
+
+
+class RecipeModifyView(View):
+    def get(self, request):
+        return render(request, "app-edit-recipe.html")
+
+
+class PlanDetailView(View):
+    def get(self, request):
+        return render(request, "app-details-schedules.html")
+
+
+class PlanListView(View):
+    def get(self, request):
+        return render(request, "app-schedules.html")
+
+
+class PlanAddView(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+
+class PlanAddRecipeView(View):
+    def get(self, request):
+        return render(request, "app-schedules-meal-recipe.html")
