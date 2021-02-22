@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Recipe(models.Model):
     name = models.CharField(max_length=64, unique=True)
@@ -9,6 +10,26 @@ class Recipe(models.Model):
     preparation_time = models.IntegerField()
     votes = models.IntegerField(default=0)
 
+class Plan(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    created = models.DateTimeField(default=timezone.now)
+    recipes = models.ManyToManyField(Recipe, through="Recipeplan")
 
+class Dayname(models.Model):
+    day_name = models.CharField(max_length=16)
+    order = models.IntegerField(unique=True)
+
+class Recipeplan(models.Model):
+    meal_name = models.CharField(max_length=255)
+    order = models.IntegerField()
+    day_name_id = models.ForeignKey(Dayname, on_delete=models.CASCADE)
+    plan_id = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    recipe_id = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+class Page(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    slug = models.CharField(max_length=255)
 
 
