@@ -2,7 +2,9 @@ from datetime import datetime
 
 from django.shortcuts import render
 from django.views import View
-from jedzonko.models import Recipe
+from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
+import random
+
 
 class IndexView(View):
 
@@ -14,16 +16,22 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
-        return render(request, "index.html")
+        results = Recipe.objects.all()
+        results = [x for x in results]
+        random.shuffle(results)
+        results = results[:3]
+        ctx = {'results': results}
+        return render(request, 'index.html', ctx)
 
 
 class DashboardView(View):
     def get(self, request):
+        plans_counter = Plan.objects.all().count()
         recipes = Recipe.objects.all()
         counter = 0
         for recipe in recipes:
             counter += 1
-        return render(request, "dashboard.html", {'counter': counter})
+        return render(request, "dashboard.html", {'counter': counter, "plans_counter": plans_counter})
 
 
 class RecipeDetailView(View):
@@ -64,6 +72,4 @@ class PlanAddView(View):
 class PlanAddRecipeView(View):
     def get(self, request):
         return render(request, "app-schedules-meal-recipe.html")
-
-
 
