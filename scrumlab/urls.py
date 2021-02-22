@@ -3,7 +3,7 @@
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
 Examples:
-Function views
+Functigit staon views
     1. Add an import:  from my_app import views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
 Class-based views
@@ -23,6 +23,6 @@ from jedzonko.views import IndexView, DashboardView, MainView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view()),
-    path('', MainView.as_view())
+    path('', MainView.as_view()),
     path('main/', DashboardView.as_view(), name='main'),
 ]
