@@ -65,3 +65,5 @@ class PlanAddRecipeView(View):
     def get(self, request):
         return render(request, "app-schedules-meal-recipe.html")
 
+
+
