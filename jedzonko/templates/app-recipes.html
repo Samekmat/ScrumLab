@@ -43,9 +43,7 @@
         </tbody>
     </table>
 </div>
-    
     {% if recipes.has_other_pages %}
-{#    <div class="paginator">#}
     <ul class="pagination justify-content-center">
         {% if recipes.has_previous %}
             <li class="page-item"><a class="page-link" href="?page={{ recipes.previous_page_number }}">< poprzednia</a></li>
@@ -63,7 +61,6 @@
             <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">> następna</a></li>
         {% endif %}
     </ul>
-{#    </div>#}
     {% endif %}
 
 {% endblock content %}
