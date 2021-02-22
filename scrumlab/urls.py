@@ -23,6 +23,6 @@ from jedzonko.views import IndexView, DashboardView, MainView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view()),
-    path('', MainView.as_view())
+    path('', MainView.as_view()),
     path('main/', DashboardView.as_view(), name='main'),
 ]

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.shortcuts import render
 from django.views import View
-
+from jedzonko.models import Recipe
 
 class IndexView(View):
 
@@ -20,5 +20,9 @@ class MainView(View):
 
 class DashboardView(View):
     def get(self, request):
-        return render(request, "dashboard.html")
+        recipes = Recipe.objects.all()
+        counter = 0
+        for recipe in recipes:
+            counter += 1
+        return render(request, "dashboard.html", {'counter': counter})
 
