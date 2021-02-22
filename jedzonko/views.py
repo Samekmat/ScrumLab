@@ -3,6 +3,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.views import View
 from jedzonko.models import Recipe
+import random
 
 class IndexView(View):
 
@@ -14,10 +15,10 @@ class IndexView(View):
 class MainView(View):
 
     def get(self, request):
-        recipe1 = Recipe.objects.get(pk=1)
-        recipe2 = Recipe.objects.get(pk=2)
-        recipe3 = Recipe.objects.get(pk=3)
-        ctx = {'recipe1': recipe1, 'recipe2': recipe2, 'recipe3': recipe3}
+        result1 = Recipe.objects.order_by('?').first()
+        result2 = Recipe.objects.order_by('?').first()
+        result3 = Recipe.objects.order_by('?').first()
+        ctx = {'result1': result1, 'result2': result2, 'result3': result3}
         return render(request, 'index.html', ctx)
 
 
