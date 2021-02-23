@@ -84,7 +84,7 @@ class PlanAddView(View):
         description = request.POST.get('planDesc')
 
         if not name or not description:
-            ctx = {'alert_flag': True, 'Error': 'Plan name, description or both are empty'}
+            ctx = {'Error': 'Plan name, description or both are empty'}
             return render(request, "app-add-schedules.html", ctx)
 
         p = Plan()
