@@ -29,10 +29,17 @@ class DashboardView(View):
     def get(self, request):
         plans_counter = Plan.objects.all().count()
         recipes = Recipe.objects.all()
+        latest_plan = Plan.objects.latest('created')
+        days = [x.day_name.order for x in latest_plan.recipeplan_set.all()]
+        days = set(days)
         counter = 0
         for recipe in recipes:
             counter += 1
-        return render(request, "dashboard.html", {'counter': counter, "plans_counter": plans_counter})
+        ctx = {
+            'counter': counter, "plans_counter": plans_counter, "latest_plan": latest_plan,
+            "days": days,
+        }
+        return render(request, "dashboard.html", ctx)
 
 
 class RecipeDetailView(View):
