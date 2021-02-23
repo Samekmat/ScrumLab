@@ -35,7 +35,9 @@
                 </div>
             </div>
         </form>
-        <script> alert("{{ Error }}"); </script>
+        {% if alert_flag %}
+            <script>alert("{{ Error }}")</script>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}
