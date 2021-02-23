@@ -79,6 +79,20 @@ class PlanAddView(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
 
+    def post(self, request):
+        name = request.POST.get('planName')
+        description = request.POST.get('planDesc')
+
+        if not name or not description:
+            ctx = {'Error': 'Plan name, description or both are empty'}
+            return render(request, "app-add-schedules.html", ctx)
+
+        p = Plan()
+        p.name = name
+        p.description = description
+        p.save()
+        return render(request, 'app-details-schedules.html', {'newPlan': p})
+
 
 class PlanAddRecipeView(View):
     def get(self, request):
