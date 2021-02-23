@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
@@ -35,13 +36,23 @@ class DashboardView(View):
 
 
 class RecipeDetailView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, "app-recipe-details.html")
 
 
 class RecipeListView(View):
     def get(self, request):
-        return render(request, "app-recipes.html")
+        recipe_list = Recipe.objects.order_by('-votes', '-created')
+        paginator = Paginator(recipe_list, 50) # tu można zmienić liczbę przepisów ustawianych na stronie
+        page = request.GET.get('page', 1)
+        try:
+            recipes = paginator.page(page)
+        except PageNotAnInteger:
+            recipes = paginator.page(1)
+        except EmptyPage:
+            recipes = paginator.page(paginator.num_pages)
+
+        return render(request, "app-recipes.html", {'recipes': recipes})
 
 
 class RecipeAddView(View):
@@ -50,7 +61,7 @@ class RecipeAddView(View):
 
 
 class RecipeModifyView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, "app-edit-recipe.html")
 
 
