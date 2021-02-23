@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
 import random
@@ -78,6 +78,20 @@ class PlanListView(View):
 class PlanAddView(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get('planName')
+        description = request.POST.get('planDesc')
+
+        if not name or not description:
+            ctx = {'Error': 'Plan name, description or both are empty'}
+            return render(request, "app-add-schedules.html", ctx)
+
+        p = Plan()
+        p.name = name
+        p.description = description
+        p.save()
+        return redirect('plan_detail', id=p.id)
 
 
 class PlanAddRecipeView(View):
