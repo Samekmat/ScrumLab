@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from django.shortcuts import render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
 import random
@@ -28,20 +29,37 @@ class DashboardView(View):
     def get(self, request):
         plans_counter = Plan.objects.all().count()
         recipes = Recipe.objects.all()
+        latest_plan = Plan.objects.latest('created')
+        days = [x.day_name.order for x in latest_plan.recipeplan_set.all()]
+        days = set(days)
         counter = 0
         for recipe in recipes:
             counter += 1
-        return render(request, "dashboard.html", {'counter': counter, "plans_counter": plans_counter})
+        ctx = {
+            'counter': counter, "plans_counter": plans_counter, "latest_plan": latest_plan,
+            "days": days,
+        }
+        return render(request, "dashboard.html", ctx)
 
 
 class RecipeDetailView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, "app-recipe-details.html")
 
 
 class RecipeListView(View):
     def get(self, request):
-        return render(request, "app-recipes.html")
+        recipe_list = Recipe.objects.order_by('-votes', '-created')
+        paginator = Paginator(recipe_list, 50) # tu można zmienić liczbę przepisów ustawianych na stronie
+        page = request.GET.get('page', 1)
+        try:
+            recipes = paginator.page(page)
+        except PageNotAnInteger:
+            recipes = paginator.page(1)
+        except EmptyPage:
+            recipes = paginator.page(paginator.num_pages)
+
+        return render(request, "app-recipes.html", {'recipes': recipes})
 
 
 class RecipeAddView(View):
@@ -51,7 +69,7 @@ class RecipeAddView(View):
         return render(request, "app-add-recipe.html")
 
 class RecipeModifyView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, "app-edit-recipe.html")
 
 
@@ -68,6 +86,20 @@ class PlanListView(View):
 class PlanAddView(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get('planName')
+        description = request.POST.get('planDesc')
+
+        if not name or not description:
+            ctx = {'Error': 'Plan name, description or both are empty'}
+            return render(request, "app-add-schedules.html", ctx)
+
+        p = Plan()
+        p.name = name
+        p.description = description
+        p.save()
+        return redirect('plan_detail', id=p.id)
 
 
 class PlanAddRecipeView(View):
