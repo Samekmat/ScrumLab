@@ -91,7 +91,7 @@ class PlanAddView(View):
         p.name = name
         p.description = description
         p.save()
-        return redirect('plan_detail')
+        return redirect('plan_detail', id=p.id)
 
 
 class PlanAddRecipeView(View):
