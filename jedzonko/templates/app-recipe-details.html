@@ -18,28 +18,24 @@
             <tr class="d-flex">
                 <th scope="row" class="col-2">Nazwa Przepisu</th>
                 <td class="col-7">
-                    Zapiekanka z ziemniakami i brukselką
+                    {{ current_recipe.name}}
                 </td>
             </tr>
             <tr class="d-flex">
                 <th scope="row" class="col-2">Opis przepisu</th>
-                <td class="col-7">Mamusina najlepsza zapiekanka pod słońcem.
-                    Można ją podać jako główne danie albo jako kolację. W
-                    zapiekance możesz użyć również kiełbasy paprykowej sprawi
-                    ona, że zapiekanka będzie ostrzejsza w smaku. Zgodnie z
-                    zalecanimi Makłowicza, podawać z dobrze dobranym winkiem ;)
+                <td class="col-7">{{ current_recipe.description}}
                 </td>
             </tr>
             <tr class="d-flex">
                 <th scope="row" class="col-2">Przygotowanie (minuty)</th>
                 <td class="col-7">
-                    45
+                    {{ current_recipe.preparation_time}}
                 </td>
             </tr>
              <tr class="d-flex">
                 <th scope="row" class="col-2">Liczba polubień</th>
                 <td class="col-7">
-                    99
+                    {{ current_recipe.votes}}
                 </td>
             </tr>
             </tbody>
@@ -54,9 +50,7 @@
         </div>
         <div class="row d-flex">
             <div class="col-5 p-4">
-                <p>Po tym czasie ziemniaki zalej śmietaną wymieszaną z Knorr
-                    Naturalnie smaczne, dodaj liście brukselki i dokładnie
-                    wymieszaj.</p>
+                <p>{{ current_recipe.ingredients}}</p>
             </div>
             <div class="col-2"></div>
             <ul class="col-5 p-4 list-unstyled">
