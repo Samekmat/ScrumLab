@@ -47,7 +47,8 @@ class RecipeListView(View):
 class RecipeAddView(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
-
+    def post(self, request):
+        return render(request, "app-add-recipe.html")
 
 class RecipeModifyView(View):
     def get(self, request):
