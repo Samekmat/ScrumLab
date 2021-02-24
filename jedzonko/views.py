@@ -94,7 +94,16 @@ class PlanDetailView(View):
 
 class PlanListView(View):
     def get(self, request):
-        return render(request, "app-schedules.html")
+        plans_list = Plan.objects.order_by('name')
+        paginator = Paginator(plans_list, 50)
+        page = request.GET.get('page', 1)
+        try:
+            plans = paginator.page(page)
+        except PageNotAnInteger:
+            plans = paginator.page(1)
+        except EmptyPage:
+            plans = paginator.page(paginator.num_pages)
+        return render(request, "app-schedules.html", {"plans": plans})
 
 
 class PlanAddView(View):
