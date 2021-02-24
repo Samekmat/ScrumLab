@@ -76,7 +76,7 @@ class RecipeAddView(View):
             new_recipe = Recipe.objects.create(name=name, ingredients=ingredients, description=description,
                                                preparation_time=preparation_time, directions=directions)
 
-            return redirect(RecipeListView)
+            return redirect('recipe_list')
         else:
             error = "Wypełnij poprawnie wszystkie pola"
             return render(request, "app-add-recipe.html", {'error': error})
