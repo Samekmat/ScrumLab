@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class Recipe(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    ingredients = models.ManyToManyField("Ingridents")
+    ingredients = models.TextField()
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -31,10 +31,5 @@ class Page(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     slug = models.SlugField(max_length=255)
-
-class Ingridents(models.Model):
-    name = models.CharField(max_length=72)
-    portion = models.CharField(max_length=72)
-
 
 

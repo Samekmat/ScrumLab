@@ -44,9 +44,7 @@ class DashboardView(View):
 
 class RecipeDetailView(View):
     def get(self, request, id):
-        current_recipe = Recipe.objects.get(id=id)
-        ctx = {"current_recipe": current_recipe}
-        return render(request, "app-recipe-details.html", ctx)
+        return render(request, "app-recipe-details.html")
 
 
 class RecipeListView(View):
