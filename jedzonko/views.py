@@ -73,7 +73,7 @@ class RecipeModifyView(View):
 
 
 class PlanDetailView(View):
-    def get(self, request):
+    def get(self, request, id):
         return render(request, "app-details-schedules.html")
 
 
@@ -103,5 +103,22 @@ class PlanAddView(View):
 
 class PlanAddRecipeView(View):
     def get(self, request):
-        return render(request, "app-schedules-meal-recipe.html")
+        plans = Plan.objects.all()
+        recipes = Recipe.objects.all()
+        days = Dayname.objects.all()
+        ctx = {'plans': plans, 'recipes': recipes, 'days': days}
+        return render(request, "app-schedules-meal-recipe.html", ctx)
+
+    def post(self, request):
+        plan_id = request.POST.get('choosePlan')
+        plan = Plan.objects.get(pk=plan_id)
+        meal_name = request.POST.get('name')
+        order = request.POST.get('order')
+        day_order = int(request.POST.get('day'))
+        day = Dayname.objects.get(order=day_order)
+        recipe_id = request.POST.get('recipe')
+        recipe = Recipe.objects.get(pk=recipe_id)
+
+        Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
+        return redirect('plan_detail', id=plan.id)
 
