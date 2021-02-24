@@ -77,10 +77,11 @@ class RecipeAddView(View):
         if name and ingredients and description and preparation_time and directions:
             new_recipe = Recipe.objects.create(name=name, ingredients=ingredients, description=description,
                                                preparation_time=preparation_time, directions=directions)
-            new_recipe.save()
+
             return redirect(RecipeListView)
         else:
-            return render(request, "app-add-recipe.html")
+            error = "Wypełnij poprawnie wszystkie pola"
+            return render(request, "app-add-recipe.html", {'error': error})
 
 
 class RecipeModifyView(View):
