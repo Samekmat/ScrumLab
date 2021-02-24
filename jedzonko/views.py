@@ -65,8 +65,22 @@ class RecipeListView(View):
 class RecipeAddView(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
+
     def post(self, request):
-        return render(request, "app-add-recipe.html")
+        name = request.POST['recipeName']
+        ingredients = request.POST['ingredients']
+        description = request.POST['recipeDescription']
+        preparation_time = request.POST['preparation']
+        directions = request.POST['way0fPreparation']
+        if name and ingredients and description and preparation_time and directions:
+            new_recipe = Recipe.objects.create(name=name, ingredients=ingredients, description=description,
+                                               preparation_time=preparation_time, directions=directions)
+
+            return redirect(RecipeListView)
+        else:
+            error = "Wypełnij poprawnie wszystkie pola"
+            return render(request, "app-add-recipe.html", {'error': error})
+
 
 class RecipeModifyView(View):
     def get(self, request, id):
