@@ -44,7 +44,9 @@ class DashboardView(View):
 
 class RecipeDetailView(View):
     def get(self, request, id):
-        return render(request, "app-recipe-details.html")
+        recipe = Recipe.objects.get(id=id)
+        ctx = {'recipe': recipe}
+        return render(request, "app-recipe-details.html", ctx)
 
 
 class RecipeListView(View):
@@ -93,21 +95,24 @@ class PlanDetailView(View):
         recipeplan_all_day_name = [x.day_name for x in plan.recipeplan_set.all()]
         days = set(recipeplan_all_day_name)
         recipeplan = Recipeplan.objects.all()
-
-
         ctx = {
             "plan": plan, "days": days, "recipeplan": recipeplan,
         }
         return render(request, "app-details-schedules.html", ctx)
 
 
-
-
-
-
 class PlanListView(View):
     def get(self, request):
-        return render(request, "app-schedules.html")
+        plans_list = Plan.objects.order_by('name')
+        paginator = Paginator(plans_list, 50)
+        page = request.GET.get('page', 1)
+        try:
+            plans = paginator.page(page)
+        except PageNotAnInteger:
+            plans = paginator.page(1)
+        except EmptyPage:
+            plans = paginator.page(paginator.num_pages)
+        return render(request, "app-schedules.html", {"plans": plans})
 
 
 class PlanAddView(View):
@@ -131,5 +136,22 @@ class PlanAddView(View):
 
 class PlanAddRecipeView(View):
     def get(self, request):
-        return render(request, "app-schedules-meal-recipe.html")
+        plans = Plan.objects.all()
+        recipes = Recipe.objects.all()
+        days = Dayname.objects.all()
+        ctx = {'plans': plans, 'recipes': recipes, 'days': days}
+        return render(request, "app-schedules-meal-recipe.html", ctx)
+
+    def post(self, request):
+        plan_id = request.POST.get('choosePlan')
+        plan = Plan.objects.get(pk=plan_id)
+        meal_name = request.POST.get('name')
+        order = request.POST.get('order')
+        day_order = int(request.POST.get('day'))
+        day = Dayname.objects.get(order=day_order)
+        recipe_id = request.POST.get('recipe')
+        recipe = Recipe.objects.get(pk=recipe_id)
+
+        Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
+        return redirect('plan_detail', id=plan.id)
 
