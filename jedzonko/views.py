@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
 import random
@@ -86,7 +86,8 @@ class RecipeAddView(View):
 
 class RecipeModifyView(View):
     def get(self, request, id):
-        return render(request, "app-edit-recipe.html")
+        recipe = get_object_or_404(Recipe, pk=id)
+        return render(request, "app-edit-recipe.html", {'recipe': recipe})
 
 
 class PlanDetailView(View):
