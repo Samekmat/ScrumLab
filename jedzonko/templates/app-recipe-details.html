@@ -38,6 +38,16 @@
                     {{ recipe.votes }}
                 </td>
             </tr>
+            <tr class="d-flex">
+                <th scope="row" class="col-2">Polub przepis</th>
+                <td class="col-7">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="id">
+                        <input type="submit" value="👍">
+                    </form>
+                </td>
+            </tr>
             </tbody>
         </table>
 

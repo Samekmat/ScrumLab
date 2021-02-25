@@ -48,6 +48,13 @@ class RecipeDetailView(View):
         ctx = {'recipe': recipe}
         return render(request, "app-recipe-details.html", ctx)
 
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        recipe.votes += 1
+        recipe.save()
+        return redirect("recipe_detail", id=recipe.id)
+
+
 
 class RecipeListView(View):
     def get(self, request):
