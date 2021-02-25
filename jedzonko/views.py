@@ -50,8 +50,14 @@ class RecipeDetailView(View):
 
     def post(self, request, id):
         recipe = Recipe.objects.get(id=id)
-        recipe.votes += 1
-        recipe.save()
+        up = request.POST.get("up")
+        down = request.POST.get("down")
+        if up:
+            recipe.votes += 1
+            recipe.save()
+        if down:
+            recipe.votes -= 1
+            recipe.save()
         return redirect("recipe_detail", id=recipe.id)
 
 

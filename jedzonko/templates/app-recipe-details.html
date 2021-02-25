@@ -44,7 +44,8 @@
                     <form method="post">
                         {% csrf_token %}
                         <input type="hidden" value="id">
-                        <input type="submit" value="👍">
+                        <input type="submit" name="up" value="👍">
+                        <input type="submit" name="down" value="👎">
                     </form>
                 </td>
             </tr>
