@@ -85,8 +85,17 @@ class RecipeAddView(View):
 
 
 class RecipeModifyView(View):
+
     def get(self, request, id):
         return render(request, "app-edit-recipe.html")
+
+    def post(self,request,id):
+        name = request.POST['recipeName']
+        ingredients = request.POST['ingredients']
+        description = request.POST['recipeDescription']
+        preparation_time = request.POST['preparation']
+        directions = request.POST['way0fPreparation']
+
 
 
 class PlanDetailView(View):
