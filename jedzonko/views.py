@@ -119,7 +119,7 @@ class PlanDetailView(View):
         plan = Plan.objects.get(pk=id)
         recipeplan_all_day_name = [x.day_name for x in plan.recipeplan_set.all()]
         days = set(recipeplan_all_day_name)
-        recipeplan = Recipeplan.objects.all()
+        recipeplan = Recipeplan.objects.filter(plan_id=id)
         ctx = {
             "plan": plan, "days": days, "recipeplan": recipeplan,
         }
