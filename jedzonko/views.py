@@ -61,11 +61,10 @@ class RecipeDetailView(View):
         return redirect("recipe_detail", id=recipe.id)
 
 
-
 class RecipeListView(View):
     def get(self, request):
         recipe_list = Recipe.objects.order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 50) # tu można zmienić liczbę przepisów ustawianych na stronie
+        paginator = Paginator(recipe_list, 50)  # tu można zmienić liczbę przepisów ustawianych na stronie
         page = request.GET.get('page', 1)
         try:
             recipes = paginator.page(page)
@@ -102,6 +101,18 @@ class RecipeModifyView(View):
         recipe = get_object_or_404(Recipe, pk=id)
         return render(request, "app-edit-recipe.html", {'recipe': recipe})
 
+    def post(self, request, id):
+        name = request.POST.get('recipeName')
+        description = request.POST.get('description')
+        preparation_time = request.POST.get('preparation_time')
+        directions = request.POST.get('directions')
+        ingredients = request.POST.get('ingredients')
+        if name and description and preparation_time and directions and ingredients:
+            Recipe.objects.create(name=name, ingredients=ingredients, description=description,
+                                  preparation_time=preparation_time, directions=directions)
+            return redirect("recipe_list")
+        else:
+            return redirect("recipe_modify", id=id)
 
 class PlanDetailView(View):
     def get(self, request, id):
@@ -168,4 +179,3 @@ class PlanAddRecipeView(View):
 
         Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
         return redirect('plan_detail', id=plan.id)
-
