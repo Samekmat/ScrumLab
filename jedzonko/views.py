@@ -14,14 +14,30 @@ class IndexView(View):
         return render(request, "test.html", ctx)
 
 
+class ContactView(View):
+
+    def get(self, request, slug):
+        try:
+            page = Page.objects.get(slug=slug)
+        except Page.DoesNotExist:
+            page = None
+        ctx = {'page': page}
+        return render(request, 'contact.html', ctx)
+
+
+
 class MainView(View):
 
     def get(self, request):
+        try:
+            page = Page.objects.get(slug="contact")
+        except Page.DoesNotExist:
+            page = None
         results = Recipe.objects.all()
         results = [x for x in results]
         random.shuffle(results)
         results = results[:3]
-        ctx = {'results': results}
+        ctx = {'results': results, 'page': page}
         about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
         ctx['about_page'] = about_page
         return render(request, 'index.html', ctx)
@@ -67,7 +83,7 @@ class RecipeDetailView(View):
 class RecipeListView(View):
     def get(self, request):
         recipe_list = Recipe.objects.order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 50) # tu można zmienić liczbę przepisów ustawianych na stronie
+        paginator = Paginator(recipe_list, 50)  # tu można zmienić liczbę przepisów ustawianych na stronie
         page = request.GET.get('page', 1)
         try:
             recipes = paginator.page(page)
