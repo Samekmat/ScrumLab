@@ -88,8 +88,21 @@ class RecipeModifyView(View):
 
 
 class PlanDetailView(View):
-    def get(self, request):
-        return render(request, "app-details-schedules.html")
+    def get(self, request, id):
+        plan = Plan.objects.get(pk=id)
+        recipeplan_all_day_name = [x.day_name for x in plan.recipeplan_set.all()]
+        days = set(recipeplan_all_day_name)
+        recipeplan = Recipeplan.objects.all()
+
+
+        ctx = {
+            "plan": plan, "days": days, "recipeplan": recipeplan,
+        }
+        return render(request, "app-details-schedules.html", ctx)
+
+
+
+
 
 
 class PlanListView(View):
