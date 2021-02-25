@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
 import random
@@ -38,6 +38,8 @@ class MainView(View):
         random.shuffle(results)
         results = results[:3]
         ctx = {'results': results, 'page': page}
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        ctx['about_page'] = about_page
         return render(request, 'index.html', ctx)
 
 
@@ -63,6 +65,19 @@ class RecipeDetailView(View):
         recipe = Recipe.objects.get(id=id)
         ctx = {'recipe': recipe}
         return render(request, "app-recipe-details.html", ctx)
+
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        up = request.POST.get("up")
+        down = request.POST.get("down")
+        if up:
+            recipe.votes += 1
+            recipe.save()
+        if down:
+            recipe.votes -= 1
+            recipe.save()
+        return redirect("recipe_detail", id=recipe.id)
+
 
 
 class RecipeListView(View):
@@ -102,17 +117,34 @@ class RecipeAddView(View):
 
 class RecipeModifyView(View):
     def get(self, request, id):
-        return render(request, "app-edit-recipe.html")
+        recipe = get_object_or_404(Recipe, pk=id)
+        return render(request, "app-edit-recipe.html", {'recipe': recipe})
 
 
 class PlanDetailView(View):
     def get(self, request, id):
-        return render(request, "app-details-schedules.html")
+        plan = Plan.objects.get(pk=id)
+        recipeplan_all_day_name = [x.day_name for x in plan.recipeplan_set.all()]
+        days = set(recipeplan_all_day_name)
+        recipeplan = Recipeplan.objects.all()
+        ctx = {
+            "plan": plan, "days": days, "recipeplan": recipeplan,
+        }
+        return render(request, "app-details-schedules.html", ctx)
 
 
 class PlanListView(View):
     def get(self, request):
-        return render(request, "app-schedules.html")
+        plans_list = Plan.objects.order_by('name')
+        paginator = Paginator(plans_list, 50)
+        page = request.GET.get('page', 1)
+        try:
+            plans = paginator.page(page)
+        except PageNotAnInteger:
+            plans = paginator.page(1)
+        except EmptyPage:
+            plans = paginator.page(paginator.num_pages)
+        return render(request, "app-schedules.html", {"plans": plans})
 
 
 class PlanAddView(View):
@@ -154,3 +186,9 @@ class PlanAddRecipeView(View):
 
         Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
         return redirect('plan_detail', id=plan.id)
+
+
+class AboutPageView(View):
+    def get(self, request):
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        return render(request, "about.html", {"page": about_page})
