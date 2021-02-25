@@ -22,6 +22,8 @@ class MainView(View):
         random.shuffle(results)
         results = results[:3]
         ctx = {'results': results}
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        ctx['about_page'] = about_page
         return render(request, 'index.html', ctx)
 
 
@@ -169,3 +171,8 @@ class PlanAddRecipeView(View):
         Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
         return redirect('plan_detail', id=plan.id)
 
+
+class AboutPageView(View):
+    def get(self, request):
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        return render(request, "about.html", {"page": about_page})
