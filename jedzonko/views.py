@@ -216,10 +216,11 @@ class PlanAddRecipeView(View):
 
 class AboutPageView(View):
     def get(self, request):
+
         about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None   
         contact_page = Page.objects.get(slug="contact") if Page.objects.filter(slug="contact").exists() else None
         return render(request, "about.html", {"page": about_page, "contact_page": contact_page})
- 
+
 class PlanModifyView(View):
     def get(self, request, id):
         plan = get_object_or_404(Plan, pk=id)
@@ -243,4 +244,10 @@ class PlanDeleteView(View):
         plan = get_object_or_404(Plan, id=id)
         plan.delete()
         return redirect('plan_list')
+
+class RecipePlanDeleteView(View):
+    def get(self, request, plan_id, recipeplan_id):
+        recipeplan = get_object_or_404(Recipeplan, id=recipeplan_id)
+        recipeplan.delete()
+        return redirect('plan_detail', plan_id)
 
