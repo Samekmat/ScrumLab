@@ -93,6 +93,13 @@ class RecipeListView(View):
         return render(request, "app-recipes.html", {'recipes': recipes})
 
 
+class RecipeSearchView(View):
+    def get(self, request):
+        name = request.GET.get("search_name")
+        recipes = Recipe.objects.filter(name__icontains=name)
+        return render(request, "app-recipes.html", {'recipes': recipes})
+
+
 class RecipeAddView(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
@@ -136,6 +143,12 @@ class RecipeModifyView(View):
             ctx = {'recipe': recipe, 'error': error}
             return render(request, "app-edit-recipe.html", ctx)
 
+
+class RecipeDeleteView(View):
+    def get(self, request, id):
+        recipe = Recipe.objects.get(pk=id)
+        recipe.delete()
+        return redirect('recipe_list')
 
 class PlanDetailView(View):
     def get(self, request, id):
@@ -204,7 +217,9 @@ class PlanAddRecipeView(View):
 class AboutPageView(View):
     def get(self, request):
         about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
-        return render(request, "about.html", {"page": about_page})
+
+        contact_page = Page.objects.get(slug="contact") if Page.objects.filter(slug="contact").exists() else None
+        return render(request, "about.html", {"page": about_page, "contact_page": contact_page})
 
 class PlanModifyView(View):
     def get(self, request, id):
@@ -228,3 +243,4 @@ class PlanDeleteView(View):
         plan = get_object_or_404(Plan, id=id)
         plan.delete()
         return redirect('plan_list')
+
