@@ -14,14 +14,32 @@ class IndexView(View):
         return render(request, "test.html", ctx)
 
 
+class ContactView(View):
+
+    def get(self, request, slug):
+        try:
+            page = Page.objects.get(slug=slug)
+        except Page.DoesNotExist:
+            page = None
+        ctx = {'page': page}
+        return render(request, 'contact.html', ctx)
+
+
+
 class MainView(View):
 
     def get(self, request):
+        try:
+            page = Page.objects.get(slug="contact")
+        except Page.DoesNotExist:
+            page = None
         results = Recipe.objects.all()
         results = [x for x in results]
         random.shuffle(results)
         results = results[:3]
-        ctx = {'results': results}
+        ctx = {'results': results, 'page': page}
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        ctx['about_page'] = about_page
         return render(request, 'index.html', ctx)
 
 
@@ -176,3 +194,9 @@ class PlanAddRecipeView(View):
 
         Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
         return redirect('plan_detail', id=plan.id)
+
+
+class AboutPageView(View):
+    def get(self, request):
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        return render(request, "about.html", {"page": about_page})
