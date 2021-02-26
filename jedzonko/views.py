@@ -132,6 +132,12 @@ class RecipeModifyView(View):
         else:
             return redirect("recipe_modify", id=id)
 
+class RecipeDeleteView(View):
+    def get(self, request, id):
+        recipe = Recipe.objects.get(pk=id)
+        recipe.delete()
+        return redirect('recipe_list')
+
 class PlanDetailView(View):
     def get(self, request, id):
         plan = Plan.objects.get(pk=id)
