@@ -203,9 +203,10 @@ class PlanAddRecipeView(View):
 
 class AboutPageView(View):
     def get(self, request):
-        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
-        return render(request, "about.html", {"page": about_page})
-
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None   
+        contact_page = Page.objects.get(slug="contact") if Page.objects.filter(slug="contact").exists() else None
+        return render(request, "about.html", {"page": about_page, "contact_page": contact_page})
+  
 class PlanModifyView(View):
     def get(self, request, id):
         plan = get_object_or_404(Plan, pk=id)
@@ -222,3 +223,4 @@ class PlanModifyView(View):
             error = "Wypełnij poprawnie wszystkie pola"
             ctx = {'plan': plan, 'error': error}
             return render(request, "app-edit-schedules.html", ctx)
+
