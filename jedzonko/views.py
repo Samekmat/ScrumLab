@@ -94,6 +94,13 @@ class RecipeListView(View):
         return render(request, "app-recipes.html", {'recipes': recipes})
 
 
+class RecipeSearchView(View):
+    def get(self, request):
+        name = request.GET.get("search_name")
+        recipes = Recipe.objects.filter(name__icontains=name)
+        return render(request, "app-recipes.html", {'recipes': recipes})
+
+
 class RecipeAddView(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
