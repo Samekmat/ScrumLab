@@ -244,3 +244,8 @@ class PlanDeleteView(View):
         plan.delete()
         return redirect('plan_list')
 
+class RecipePlanDeleteView(View):
+    def get(self, request, plan_id, recipeplan_id):
+        recipeplan = get_object_or_404(Recipeplan, id=recipeplan_id)
+        recipeplan.delete()
+        return redirect('plan_detail', plan_id)
