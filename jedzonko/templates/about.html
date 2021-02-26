@@ -36,7 +36,9 @@
                     <a class="nav-link disabled" href="{% url 'recipe_list' %}">Przepisy</a>
                 </li>
                 <li class="nav-item ml-4">
-                    <a class="nav-link disabled" href="#contact">Kontakt</a>
+                    <a class="nav-link disabled"
+                            {% if contact_page %} href="{% url 'contact' 'contact' %}"
+                            {% else %} href="#contact" {% endif %}>Kontakt</a>
                 </li>
             </ul>
         </nav>
@@ -59,8 +61,55 @@
             </div>
         </div>
     </section>
+    {% if contact_page %}
 
-    <footer class="footer-section pt-3 pb-3">
+    {% else %}
+    <section class="last-info-section padding-small" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h3 class="mb-4">Kontakt</h3>
+                    <p>Jeżeli chcesz pomóc rozwijać nasz serwis, skontaktuj się z nami</p>
+                </div>
+                <div class="col pl-4 ml-4">
+                    <h3 class="mb-4">Dane kontaktowe</h3>
+                    <ul class="container">
+                        <li>Przepisy Pani Iksińskiej</li>
+                        <li>ul. Ogrodowa 54</li>
+                        <li>01-237 Warszawa</li>
+                        <li>tel. 22 639 23 56</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <h3 class="mb-4">Subskrybuj</h3>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control border-0 rounded-0" placeholder=""
+                            aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="input-group-text btn-color border-0 rounded-0" type="submit" id="basic-addon2"><a
+                                    href="index.html">Subskrybuj</a></button>
+                        </div>
+                    </div>
+                    <div class="container d-flex-row">
+                        <a href="#">
+                            <i class="fab fa-facebook-square mr-4 icon-social"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fab fa-twitter-square mr-4 icon-social"></i>
+
+                        </a>
+                        <a href="#">
+                            <i class="fab fa-instagram icon-social"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+
+    <footer class="footer-section pt-3 pb-3" style="position: absolute; bottom: 0; height: 40px; width: 100%;">
         <div class="container text-center">
             <h5 class="text-light">Copyright <span class="footer-text-color">ZaplanujJedzonko.pl</span></h5>
         </div>

@@ -146,8 +146,10 @@
             </div>
         </div>
     </section>
+    {% if about_page %}
 
-    <section class="padding-medium story bg-light" id="about">
+    {% else %}
+        <section class="padding-medium story bg-light" id="about">
         <div class="container d-flex justify-content-center align-items-center">
             <div class="row">
                 <div class="col-4 mr-4">
@@ -164,6 +166,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
     <section class="last-info-section padding-small" id="contact">
         <div class="container">
