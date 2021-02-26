@@ -8,7 +8,7 @@
             <h3 class="color-header text-uppercase">SZCZEGÓŁY PLANU</h3>
         </div>
         <div class="col d-flex justify-content-end mb-2 noPadding">
-            <a href="" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
+            <a href="{% url 'plan_list' %}" class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
         </div>
     </div>
 
@@ -34,11 +34,11 @@
             </div>
         </div>
 
-        {% for day in days %}
+        {% for day_with_meals in plan.get_meals_in_day %}
         <table class="table">
             <thead>
             <tr class="d-flex">
-                <th class="col-2">{{ day.day_name }}</th>
+                <th class="col-2">{{ day_with_meals.0.day_name }}</th>
 
                 <th class="col-7"></th>
                 <th class="col-1"></th>
@@ -46,10 +46,10 @@
             </tr>
             </thead>
             <tbody class="text-color-lighter">
-            {% for meal in day.recipeplan_set.all %}
+            {% for recipeplan in day_with_meals.1 %}
             <tr class="d-flex">
-                <td class="col-2">{{ meal.meal_name }}</td>
-                <td class="col-7">{{ meal.recipe.name }}</td>
+                <td class="col-2">{{ recipeplan.meal_name }}</td>
+                <td class="col-7">{{ recipeplan.recipe.name }}</td>
                 <td class="col-1 center">
                     <a href="#" class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
                 </td>
@@ -63,5 +63,6 @@
             </tbody>
         </table>
         {% endfor %}
+    </div>
 </div>
 {% endblock content %}

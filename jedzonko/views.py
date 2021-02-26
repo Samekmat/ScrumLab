@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from jedzonko.models import Recipe, Plan, Dayname, Recipeplan, Page
 import random
@@ -14,14 +14,32 @@ class IndexView(View):
         return render(request, "test.html", ctx)
 
 
+class ContactView(View):
+
+    def get(self, request, slug):
+        try:
+            page = Page.objects.get(slug=slug)
+        except Page.DoesNotExist:
+            page = None
+        ctx = {'page': page}
+        return render(request, 'contact.html', ctx)
+
+
+
 class MainView(View):
 
     def get(self, request):
+        try:
+            page = Page.objects.get(slug="contact")
+        except Page.DoesNotExist:
+            page = None
         results = Recipe.objects.all()
         results = [x for x in results]
         random.shuffle(results)
         results = results[:3]
-        ctx = {'results': results}
+        ctx = {'results': results, 'page': page}
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        ctx['about_page'] = about_page
         return render(request, 'index.html', ctx)
 
 
@@ -48,11 +66,23 @@ class RecipeDetailView(View):
         ctx = {'recipe': recipe}
         return render(request, "app-recipe-details.html", ctx)
 
+    def post(self, request, id):
+        recipe = Recipe.objects.get(id=id)
+        up = request.POST.get("up")
+        down = request.POST.get("down")
+        if up:
+            recipe.votes += 1
+            recipe.save()
+        if down:
+            recipe.votes -= 1
+            recipe.save()
+        return redirect("recipe_detail", id=recipe.id)
+
 
 class RecipeListView(View):
     def get(self, request):
         recipe_list = Recipe.objects.order_by('-votes', '-created')
-        paginator = Paginator(recipe_list, 50) # tu można zmienić liczbę przepisów ustawianych na stronie
+        paginator = Paginator(recipe_list, 50)  # tu można zmienić liczbę przepisów ustawianych na stronie
         page = request.GET.get('page', 1)
         try:
             recipes = paginator.page(page)
@@ -87,25 +117,30 @@ class RecipeAddView(View):
 class RecipeModifyView(View):
 
     def get(self, request, id):
-        return render(request, "app-edit-recipe.html")
+        recipe = get_object_or_404(Recipe, pk=id)
+        return render(request, "app-edit-recipe.html", {'recipe': recipe})
 
-    def post(self,request,id):
-        name = request.POST['recipeName']
-        ingredients = request.POST['ingredients']
-        description = request.POST['recipeDescription']
-        preparation_time = request.POST['preparation']
-        directions = request.POST['way0fPreparation']
-
+    def post(self, request, id):
+        name = request.POST.get('recipeName')
+        description = request.POST.get('description')
+        preparation_time = request.POST.get('preparation_time')
+        directions = request.POST.get('directions')
+        ingredients = request.POST.get('ingredients')
+        if name and description and preparation_time and directions and ingredients:
+            Recipe.objects.create(name=name, ingredients=ingredients, description=description,
+                                  preparation_time=preparation_time, directions=directions)
+            return redirect("recipe_list")
+        else:
+            error = "Wypełnij poprawnie wszystkie pola"
+            ctx = {'id': id, 'error': error}
+            return render(request, "recipe_modify", id=id)
 
 
 class PlanDetailView(View):
     def get(self, request, id):
         plan = Plan.objects.get(pk=id)
-        recipeplan_all_day_name = [x.day_name for x in plan.recipeplan_set.all()]
-        days = set(recipeplan_all_day_name)
-        recipeplan = Recipeplan.objects.all()
         ctx = {
-            "plan": plan, "days": days, "recipeplan": recipeplan,
+            "plan": plan,
         }
         return render(request, "app-details-schedules.html", ctx)
 
@@ -164,3 +199,8 @@ class PlanAddRecipeView(View):
         Recipeplan.objects.create(meal_name=meal_name, order=order, day_name=day, plan=plan, recipe=recipe)
         return redirect('plan_detail', id=plan.id)
 
+
+class AboutPageView(View):
+    def get(self, request):
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
+        return render(request, "about.html", {"page": about_page})

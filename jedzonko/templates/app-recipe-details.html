@@ -8,7 +8,7 @@
             <div class="col"><h3 class="color-header text-uppercase">Szczegóły
                 przepisu</h3></div>
             <div class="col d-flex justify-content-end mb-2"><a
-                    href="/app-recipes.html"
+                    href="{% url 'recipe_list' %}"
                     class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
             </div>
         </div>
@@ -36,6 +36,17 @@
                 <th scope="row" class="col-2">Liczba polubień</th>
                 <td class="col-7">
                     {{ recipe.votes }}
+                </td>
+            </tr>
+            <tr class="d-flex">
+                <th scope="row" class="col-2">Polub przepis</th>
+                <td class="col-7">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="id">
+                        <input type="submit" name="up" value="👍">
+                        <input type="submit" name="down" value="👎">
+                    </form>
                 </td>
             </tr>
             </tbody>
