@@ -17,6 +17,15 @@ class Plan(models.Model):
     created = models.DateTimeField(default=timezone.now)
     recipes = models.ManyToManyField(Recipe, through="Recipeplan")
 
+    def get_meals_in_day(self):
+        days = Dayname.objects.order_by('order')
+        ret_lst = []
+        for day in days:
+            rp = Recipeplan.objects.filter(plan=self, day_name=day).order_by('order')
+            if rp.count() > 0:
+                ret_lst.append((day, rp))
+        return ret_lst
+
 class Dayname(models.Model):
     day_name = models.CharField(max_length=16)
     order = models.IntegerField(unique=True)
