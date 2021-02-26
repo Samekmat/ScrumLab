@@ -222,3 +222,9 @@ class PlanModifyView(View):
             error = "Wypełnij poprawnie wszystkie pola"
             ctx = {'plan': plan, 'error': error}
             return render(request, "app-edit-schedules.html", ctx)
+
+class PlanDeleteView(View):
+    def get(self, request, id):
+        plan = get_object_or_404(Plan, id=id)
+        plan.delete()
+        return redirect('plan_list')
