@@ -15,7 +15,6 @@ class IndexView(View):
 
 
 class ContactView(View):
-
     def get(self, request, slug):
         try:
             page = Page.objects.get(slug=slug)
@@ -131,9 +130,11 @@ class RecipeModifyView(View):
                                   preparation_time=preparation_time, directions=directions)
             return redirect("recipe_list")
         else:
+            recipe = Recipe(name=name, ingredients=ingredients, description=description,
+                            preparation_time=preparation_time, directions=directions)
             error = "Wypełnij poprawnie wszystkie pola"
-            ctx = {'id': id, 'error': error}
-            return render(request, "recipe_modify", id=id)
+            ctx = {'recipe': recipe, 'error': error}
+            return render(request, "app-edit-recipe.html", ctx)
 
 
 class PlanDetailView(View):
