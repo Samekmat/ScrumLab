@@ -30,7 +30,7 @@
                 </li>
                 -->
                 <li class="nav-item ml-4">
-                    <a class="nav-link" href="#about">o aplikacji</a>
+                    <a class="nav-link" {% if about_page %} href="{% url 'about' %}" {% else %} href="#about" {% endif %}>o aplikacji</a>
                 </li>
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="{% url 'recipe_list' %}">Przepisy</a>
@@ -44,40 +44,7 @@
 
     <section class="padding-large bg-light">
         <div id="carouselExampleControls" class="carousel slide main-slider" data-ride="carousel">
-            <div class="carousel-inner container">
-                <div class="carousel-item active">
-                    <div class="container w-75 d-flex">
-                        <div class="carousel-caption d-block">
-                            <h1>{{ results.0.name }}</h1>
-                            <h3> {{ results.0.description }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container w-75 d-flex">
-                        <div class="carousel-caption d-block">
-                            <h1>{{ results.1.name }}</h1>
-                            <h3> {{ results.1.description }}</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container w-75 d-flex">
-                        <div class="carousel-caption d-block">
-                            <h1>{{ results.2.name }}</h1>
-                            <h3>{{ results.2.description }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
+
         </div>
     </section>
 
