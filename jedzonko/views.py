@@ -216,10 +216,11 @@ class PlanAddRecipeView(View):
 
 class AboutPageView(View):
     def get(self, request):
-        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None
 
+        about_page = Page.objects.get(slug="about") if Page.objects.filter(slug="about").exists() else None   
         contact_page = Page.objects.get(slug="contact") if Page.objects.filter(slug="contact").exists() else None
         return render(request, "about.html", {"page": about_page, "contact_page": contact_page})
+  
 
 class PlanModifyView(View):
     def get(self, request, id):
@@ -238,6 +239,7 @@ class PlanModifyView(View):
             ctx = {'plan': plan, 'error': error}
             return render(request, "app-edit-schedules.html", ctx)
 
+
 class PlanDeleteView(View):
     def get(self, request, id):
         plan = get_object_or_404(Plan, id=id)
@@ -249,3 +251,4 @@ class RecipePlanDeleteView(View):
         recipeplan = get_object_or_404(Recipeplan, id=recipeplan_id)
         recipeplan.delete()
         return redirect('plan_detail', plan_id)
+
