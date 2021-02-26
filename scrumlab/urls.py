@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path
 
 
-from jedzonko.views import (IndexView, DashboardView, MainView, RecipeDetailView, RecipeListView, RecipeAddView
-, RecipeModifyView, PlanDetailView, PlanListView, PlanAddView, PlanAddRecipeView, AboutPageView, ContactView, PlanModifyView, PlanDeleteView,
+from jedzonko.views import (IndexView, DashboardView, MainView, RecipeDetailView, RecipeListView, RecipeAddView, RecipeModifyView, 
+                            PlanDetailView, PlanListView, PlanAddView, PlanAddRecipeView, AboutPageView, ContactView, PlanModifyView, PlanDeleteView,
                             RecipeDeleteView, RecipeSearchView)
 
 
