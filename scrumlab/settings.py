@@ -64,6 +64,12 @@ DATABASES = {
         # 'HOST': 'localhost',
         # 'PASSWORD': 'mati2000',
         # 'USER': 'postgres',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd2jt20qr9okqtn',
+        'HOST': 'ec2-3-212-75-25.compute-1.amazonaws.com',
+        'PORT': '5432',
+        'USER': 'hbmcfxjwhlsuyc',
+        'PASSWORD': '12b7b62d78a8459e7634abd5d9909febce38ab506be4f499b3bf5fe83468255f',
     }
 }
 
